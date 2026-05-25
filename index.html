@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Robot - 3D Showcase</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #e0e0e0;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(100, 200, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 100, 200, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #64c8ff 0%, #ff64c8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #a0a0b0;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        .showcase-container {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+        
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            background: rgba(100, 200, 255, 0.05);
+            aspect-ratio: 1;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-details h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .hero-details > p {
+            font-size: 15px;
+            color: #a0a0b0;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+        
+        .price-display {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #64c8ff 0%, #ff64c8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .currency {
+            font-size: 16px;
+            color: #a0a0b0;
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .spec-item h3 {
+            font-size: 14px;
+            color: #64c8ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .spec-item p {
+            font-size: 13px;
+            color: #a0a0b0;
+            line-height: 1.5;
+        }
+        
+        .tech-section {
+            margin-bottom: 4rem;
+        }
+        
+        .tech-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .component-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .component-card:hover {
+            border-color: rgba(100, 200, 255, 0.5);
+            background: rgba(100, 200, 255, 0.08);
+            transform: translateY(-4px);
+        }
+        
+        .component-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 100, 200, 0.05) 100%);
+            overflow: hidden;
+        }
+        
+        .component-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .component-info {
+            padding: 1.5rem;
+        }
+        
+        .component-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+        
+        .component-info p {
+            font-size: 13px;
+            color: #a0a0b0;
+            line-height: 1.6;
+        }
+        
+        .details-section {
+            margin-bottom: 4rem;
+        }
+        
+        .details-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+        
+        .features-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .feature {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(100, 200, 255, 0.05);
+            border-left: 3px solid rgba(100, 200, 255, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            background: rgba(100, 200, 255, 0.1);
+            border-left-color: #64c8ff;
+        }
+        
+        .feature-icon {
+            font-size: 20px;
+            color: #64c8ff;
+            font-weight: 700;
+        }
+        
+        .feature h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+        }
+        
+        .feature p {
+            font-size: 13px;
+            color: #a0a0b0;
+        }
+        
+        .cta-section {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            padding: 14px 32px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .primary-button {
+            background: linear-gradient(135deg, #64c8ff 0%, #ff64c8 100%);
+            color: #0f0f1e;
+        }
+        
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(100, 200, 255, 0.3);
+        }
+        
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            color: #64c8ff;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(100, 200, 255, 0.15);
+            border-color: rgba(100, 200, 255, 0.6);
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .hero-image {
+                aspect-ratio: auto;
+                height: 300px;
+            }
+            
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-section {
+                flex-direction: column;
+            }
+            
+            .cta-button {
+                width: 100%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 30, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 36px;
+            height: 36px;
+            background: rgba(100, 200, 255, 0.1);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #64c8ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: rgba(100, 200, 255, 0.2);
+            border-color: #64c8ff;
+        }
+        
+        .modal-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            border-color: rgba(100, 200, 255, 0.5);
+            background: rgba(100, 200, 255, 0.08);
+            transform: translateY(-4px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.1) 0%, rgba(255, 100, 200, 0.05) 100%);
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .coming-soon-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #a0a0b0;
+        }
+        
+        .coming-soon-placeholder span {
+            font-size: 32px;
+        }
+        
+        .coming-soon-placeholder p {
+            font-size: 12px;
+        }
+        
+        .product-info {
+            padding: 1.25rem;
+        }
+        
+        .product-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+        
+        .product-card p {
+            font-size: 12px;
+            color: #a0a0b0;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #64c8ff;
+        }
+        
+        .price-decimal {
+            font-size: 12px;
+            color: #a0a0b0;
+        }
+        
+        .badge-soon {
+            display: inline-block;
+            background: rgba(100, 200, 255, 0.1);
+            color: #64c8ff;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .product-btn {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            background: rgba(100, 200, 255, 0.05);
+            color: #64c8ff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-btn:hover {
+            background: rgba(100, 200, 255, 0.15);
+            border-color: rgba(100, 200, 255, 0.6);
+        }
+        
+        .product-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .coming-soon-card:hover {
+            background: rgba(100, 200, 255, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+            
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 18px;
+            }
+            
+            .modal-content h2 {
+                font-size: 24px;
+                margin-bottom: 1.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced Robot</h1>
+            <p class="subtitle">BMO-inspired AI companion with advanced autonomous capabilities</p>
+        </header>
+        
+        <div class="showcase-container">
+            <!-- Main Robot Showcase -->
+            <div class="hero-section">
+                <div class="hero-image">
+                    <img src="first.png" alt="Advanced Robot" />
+                </div>
+                <div class="hero-details">
+                    <h2>Meet Your AI Companion</h2>
+                    <p>A beautifully designed autonomous robot inspired by BMO, featuring cutting-edge AI and real-time processing capabilities.</p>
+                    
+                    <div class="price-display">
+                        <span class="price">$499</span>
+                        <span class="currency">.99</span>
+                    </div>
+                    
+                    <div class="specs-grid">
+                        <div class="spec-item">
+                            <h3>Design</h3>
+                            <p>BMO-inspired cube form factor with rounded edges</p>
+                        </div>
+                        <div class="spec-item">
+                            <h3>Intelligence</h3>
+                            <p>Advanced neural network algorithms</p>
+                        </div>
+                        <div class="spec-item">
+                            <h3>Processing</h3>
+                            <p>Real-time autonomous decision making</p>
+                        </div>
+                        <div class="spec-item">
+                            <h3>Battery</h3>
+                            <p>12-hour continuous operation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technical Components -->
+            <div class="tech-section">
+                <h3>Technical Specifications</h3>
+                
+                <div class="components-grid">
+                    <!-- Raspberry Pi -->
+                    <div class="component-card">
+                        <div class="component-image">
+                            <img src="rasp.png" alt="Raspberry Pi processor" />
+                        </div>
+                        <div class="component-info">
+                            <h4>Powered by Raspberry Pi</h4>
+                            <p>High-performance CPU with 8GB RAM for seamless multitasking and real-time processing. Handles complex computations effortlessly.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Algorithm -->
+                    <div class="component-card">
+                        <div class="component-image">
+                            <img src="algo.png" alt="Algorithm visualization" />
+                        </div>
+                        <div class="component-info">
+                            <h4>Advanced Algorithm</h4>
+                            <p>Proprietary machine learning algorithm enables adaptive learning and intelligent decision-making. Improves over time with interaction.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Details -->
+            <div class="details-section">
+                <h3>Key Features</h3>
+                <div class="features-list">
+                    <div class="feature">
+                        <span class="feature-icon">→</span>
+                        <div>
+                            <h4>Voice Recognition</h4>
+                            <p>Natural language processing with accent adaptation</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">→</span>
+                        <div>
+                            <h4>Computer Vision</h4>
+                            <p>360° obstacle detection and environmental mapping</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">→</span>
+                        <div>
+                            <h4>Autonomous Navigation</h4>
+                            <p>Self-learning pathfinding and obstacle avoidance</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">→</span>
+                        <div>
+                            <h4>WiFi Connectivity</h4>
+                            <p>Cloud sync and remote control capabilities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <button class="cta-button primary-button">Order Now</button>
+                <button class="cta-button secondary-button" onclick="openProducts()">View All Products</button>
+            </div>
+        </div>
+        
+        <!-- Products Modal -->
+        <div id="productsModal" class="modal" onclick="closeProducts(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeProducts()">✕</button>
+                <h2>All Products</h2>
+                
+                <div class="products-grid">
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="second.png" alt="Product 2" />
+                        </div>
+                        <div class="product-info">
+                            <h3>Product 2</h3>
+                            <p>Premium quality 3D asset</p>
+                            <div class="product-price">
+                                <span class="price-amount">$39</span>
+                                <span class="price-decimal">.99</span>
+                            </div>
+                            <button class="product-btn">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="third.png" alt="Product 3" />
+                        </div>
+                        <div class="product-info">
+                            <h3>Product 3</h3>
+                            <p>Professional 3D model collection</p>
+                            <div class="product-price">
+                                <span class="price-amount">$59</span>
+                                <span class="price-decimal">.99</span>
+                            </div>
+                            <button class="product-btn">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 4 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="fourth.png" alt="Product 4" />
+                        </div>
+                        <div class="product-info">
+                            <h3>Product 4</h3>
+                            <p>Exclusive 3D digital asset</p>
+                            <div class="product-price">
+                                <span class="price-amount">$44</span>
+                                <span class="price-decimal">.99</span>
+                            </div>
+                            <button class="product-btn">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 5 -->
+                    <div class="product-card coming-soon-card">
+                        <div class="product-image">
+                            <div class="coming-soon-placeholder">
+                                <span>✨</span>
+                                <p>Coming Soon</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Product 5</h3>
+                            <p>Exciting new 3D model in development</p>
+                            <div class="product-price">
+                                <span class="badge-soon">Launching Soon</span>
+                            </div>
+                            <button class="product-btn" disabled>Notify Me</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openProducts() {
+            document.getElementById('productsModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeProducts(event) {
+            if (event && event.target.id !== 'productsModal') return;
+            document.getElementById('productsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProducts();
+            }
+        });
+    </script>
+</body>
+</html>
